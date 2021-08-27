@@ -37,8 +37,9 @@ public class InvoiceProduct {
 	@Column(name = "currency")
 	private String currency;
 	
-	@Column(name="created_by")
-	private int createdBy;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "created_by")
+	private User user;
 	
 	@Column(name="created_at")
 	private Timestamp createdAt;
@@ -108,12 +109,12 @@ public class InvoiceProduct {
 		this.currency = currency;
 	}
 
-	public int getCreatedBy() {
-		return createdBy;
+	public User getUser() {
+		return user;
 	}
 
-	public void setCreatedBy(int createdBy) {
-		this.createdBy = createdBy;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Timestamp getCreatedAt() {

@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import java.sql.Timestamp;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +21,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "user_name")
@@ -37,17 +36,6 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
-	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
-	private List<PurchaseOrder> purchaseOrders;
-	
-	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
-	private List<Invoice> invoices;
-	
-	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-			 CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="created_by")
-	private Admin admin;
-	
 	@Column(name="created_at")
 	private Timestamp createdAt;
 	
@@ -56,6 +44,24 @@ public class User {
 	
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
+	
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
+	private List<PurchaseOrder> purchaseOrders;
+	
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
+	private List<Invoice> invoices;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Vendor> vendors;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Product> products;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<OrderProduct> orderProductMappings;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<InvoiceProduct> invoiceProducts;
 
 	public User() {
 
@@ -116,14 +122,6 @@ public class User {
 		this.purchaseOrders = purchaseOrders;
 	}
 
-	public Admin getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
-	}
-
 	
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -158,12 +156,66 @@ public class User {
 		this.invoices = invoices;
 	}
 
+	public List<Vendor> getVendors() {
+		return vendors;
+	}
+
+	public void setVendors(List<Vendor> vendors) {
+		this.vendors = vendors;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	public List<OrderProduct> getOrderProductMappings() {
+		return orderProductMappings;
+	}
+
+	public void setOrderProductMappings(List<OrderProduct> orderProductMappings) {
+		this.orderProductMappings = orderProductMappings;
+	}
+
+	public List<InvoiceProduct> getInvoiceProducts() {
+		return invoiceProducts;
+	}
+
+	public void setInvoiceProducts(List<InvoiceProduct> invoiceProducts) {
+		this.invoiceProducts = invoiceProducts;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", password=" + password + "]";
 	}
 
+	public void addProduct(Product product) {
+
+		if (products == null) {
+			products = new ArrayList<>();
+		}
+
+		products.add(product);
+
+		product.setAdmin(this);
+	}
+	
+	public void addVendor(Vendor vendor) {
+
+		if (vendors == null) {
+			vendors = new ArrayList<>();
+		}
+
+		vendors.add(vendor);
+
+		vendor.setAdmin(this);
+	}
+	
 	public void addPurchaseOrder(PurchaseOrder purchaseOrder) {
 
 		if (purchaseOrders == null) {

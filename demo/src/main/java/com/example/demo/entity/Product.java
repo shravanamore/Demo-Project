@@ -43,7 +43,7 @@ public class Product {
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			 CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="created_by")
-	private Admin admin;
+	private User user;
 	
 	@Column(name="created_at")
 	private Timestamp createdAt;
@@ -97,12 +97,12 @@ public class Product {
 		this.vendors = vendors;
 	}
 
-	public Admin getAdmin() {
-		return admin;
+	public User getAdmin() {
+		return user;
 	}
 
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
+	public void setAdmin(User user) {
+		this.user = user;
 	}
 
 

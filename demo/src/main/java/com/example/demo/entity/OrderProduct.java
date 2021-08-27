@@ -41,8 +41,9 @@ public class OrderProduct {
 	@JoinColumn(name="order_id")
 	private PurchaseOrder purchaseOrder;
 	
-	@Column(name="created_by")
-	private int createdBy;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "created_by")
+	private User user;
 	
 	@Column(name="created_at")
 	private Timestamp createdAt;
@@ -121,14 +122,13 @@ public class OrderProduct {
 	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
-
 	
-	public int getCreatedBy() {
-		return createdBy;
+	public User getUser() {
+		return user;
 	}
 
-	public void setCreatedBy(int createdBy) {
-		this.createdBy = createdBy;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Timestamp getCreatedAt() {
